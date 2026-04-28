@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: frauddetector-api
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: MODEL_PATH
+        value: models/isolation_forest.joblib
+      - key: SCALER_PATH
+        value: models/robust_scaler.joblib
+      - key: CORS_ORIGINS
+        value: "*"
+      - key: TRANSACTION_DB_PATH
+        value: /var/data/transactions.db
+    disks:
+      - name: transaction-data
+        mountPath: /var/data
+        sizeGB: 1

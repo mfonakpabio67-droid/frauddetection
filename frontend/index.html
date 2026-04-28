@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fraud Detection System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div class="brand">
+          <i data-lucide="shield-check"></i>
+          <h1>FRAUD DETECTION SYSTEM</h1>
+        </div>
+        <div class="system-status">SYSTEM STATUS: <span class="dot"></span><span>ONLINE</span></div>
+      </header>
+
+      <section class="workspace">
+        <aside class="sidebar">
+          <nav class="nav-list">
+            <button class="nav-item active" type="button"><i data-lucide="house"></i>Dashboard</button>
+            <button class="nav-item" type="button"><i data-lucide="search"></i>Scan Transaction</button>
+            <button class="nav-item" type="button"><i data-lucide="list"></i>Transaction Logs</button>
+            <button class="nav-item" type="button"><i data-lucide="bar-chart-3"></i>Analytics</button>
+            <button class="nav-item" type="button"><i data-lucide="shield"></i>Risk Rules</button>
+            <button class="nav-item" type="button"><i data-lucide="settings"></i>Settings</button>
+          </nav>
+          <section class="sysinfo">
+            <p>&gt; SYSTEM INFO</p>
+            <p>Version <span>1.0.0</span></p>
+            <p>Mode <span>AI-Powered</span></p>
+            <p>Storage <span>SQLite</span></p>
+            <p>API <span id="metricApi">N/A</span></p>
+          </section>
+        </aside>
+
+        <section class="mainboard">
+          <header class="hero">
+            <div>
+              <h2>AI POWERED FINANCIAL FRAUD DETECTION</h2>
+              <p>Real-time Transaction Anomaly Detection System</p>
+            </div>
+            <div class="world-map" aria-hidden="true"></div>
+          </header>
+
+          <section class="main-grid">
+            <article class="card">
+              <h3>SCAN NEW TRANSACTION</h3>
+              <form id="txnForm" class="terminal-form">
+                <label>
+                  <span>Transaction Amount ($)</span>
+                  <input id="amount" name="amount" type="number" min="0" step="0.01" value="2500" required />
+                </label>
+                <label>
+                  <span>Distance From Home (km)</span>
+                  <input id="distance" name="distance" type="number" min="0" step="0.01" value="120" required />
+                </label>
+                <label>
+                  <span>Time Since Last Transaction (minutes)</span>
+                  <input id="timeDelta" name="timeDelta" type="number" min="0" step="0.01" value="2" required />
+                </label>
+                <button id="scanButton" class="scan-btn" type="submit">
+                  <i data-lucide="radar"></i>
+                  SCAN TRANSACTION
+                </button>
+              </form>
+              <div id="status" class="status hidden">SCANNING...</div>
+            </article>
+
+            <article class="card">
+              <h3>ANALYSIS RESULT</h3>
+              <section id="result" class="result">
+                <div class="result-hero">
+                  <div class="result-icon" id="resultIcon">!</div>
+                  <div>
+                    <h4 id="resultTitle">AWAITING SCAN</h4>
+                    <p id="resultMeta">Risk Level: LOW | Risk Score: 0.0000</p>
+                  </div>
+                </div>
+                <p class="reason" id="resultReason">Reason: No transaction analyzed yet.</p>
+              </section>
+
+              <div class="result-table">
+                <div class="row"><span>Transaction ID</span><strong id="txnId">TXN_PENDING</strong></div>
+                <div class="row"><span>Timestamp</span><strong id="txnTime">-</strong></div>
+                <div class="row"><span>Risk Score</span><strong id="txnScore">0.0000 / 1.0000</strong></div>
+                <div class="row"><span>Model Used</span><strong>Isolation Forest</strong></div>
+                <div class="row"><span>Prediction</span><strong id="txnPrediction">Awaiting Input</strong></div>
+              </div>
+            </article>
+          </section>
+
+          <section class="bottom-grid">
+            <article class="card">
+              <h3>SYSTEM STATISTICS</h3>
+              <div class="stats-grid">
+                <div class="stat-card">
+                  <strong id="metricTotal">0</strong>
+                  <span>Total Scans</span>
+                </div>
+                <div class="stat-card danger">
+                  <strong id="metricFraud">0</strong>
+                  <span>Fraud Detected</span>
+                </div>
+                <div class="stat-card warning">
+                  <strong id="metricRatio">0.00%</strong>
+                  <span>Fraud Rate</span>
+                </div>
+                <div class="stat-card">
+                  <strong id="metricAccuracy">98.0%</strong>
+                  <span>Model Confidence</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="card">
+              <h3>RECENT TRANSACTION LOGS</h3>
+              <div class="logs-head">
+                <span>Status</span><span>Amount</span><span>Distance</span><span>Time</span><span>Risk</span>
+              </div>
+              <div id="recentLogs" class="logs-body"></div>
+            </article>
+          </section>
+        </section>
+      </section>
+    </main>
+
+    <script src="./config.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
+
