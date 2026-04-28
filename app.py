@@ -43,15 +43,29 @@ def create_app() -> Flask:
         storage_uri="memory://",
     )
 
-    model_service = ModelService(
-        model_path=MODEL_PATH,
-        scaler_path=SCALER_PATH,
-        metadata_path=METADATA_PATH,
-    )
-    transaction_log = TransactionLog(db_path=TRANSACTION_DB_PATH)
+    model_service = None
+    transaction_log = None
+    startup_errors = []
+
+    try:
+        model_service = ModelService(
+            model_path=MODEL_PATH,
+            scaler_path=SCALER_PATH,
+            metadata_path=METADATA_PATH,
+        )
+    except Exception as exc:
+        startup_errors.append(f"MODEL_INIT_FAILED: {exc}")
+        app.logger.exception("Model service initialization failed: %s", exc)
+
+    try:
+        transaction_log = TransactionLog(db_path=TRANSACTION_DB_PATH)
+    except Exception as exc:
+        startup_errors.append(f"TXN_LOG_INIT_FAILED: {exc}")
+        app.logger.exception("Transaction log initialization failed: %s", exc)
 
     app.config["MODEL_SERVICE"] = model_service
     app.config["TRANSACTION_LOG"] = transaction_log
+    app.config["STARTUP_ERRORS"] = startup_errors
 
     app.register_blueprint(api_blueprint)
 
@@ -69,6 +83,8 @@ def create_app() -> Flask:
         SCALER_PATH,
         TRANSACTION_DB_PATH,
     )
+    if startup_errors:
+        app.logger.error("Startup completed with errors: %s", startup_errors)
     return app
 
 

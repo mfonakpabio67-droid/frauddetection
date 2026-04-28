@@ -8,18 +8,43 @@ api_blueprint = Blueprint("api", __name__, url_prefix="/api")
 
 @api_blueprint.get("/health")
 def health():
+    startup_errors = current_app.config.get("STARTUP_ERRORS", [])
+    if startup_errors:
+        return jsonify({"status": "degraded", "startup_errors": startup_errors}), 503
     return jsonify({"status": "ok"})
 
 
 @api_blueprint.get("/metrics")
 def metrics():
     txn_log = current_app.config["TRANSACTION_LOG"]
+    if txn_log is None:
+        startup_errors = current_app.config.get("STARTUP_ERRORS", [])
+        return (
+            jsonify(
+                {
+                    "error": "Transaction log unavailable.",
+                    "startup_errors": startup_errors,
+                }
+            ),
+            503,
+        )
     return jsonify(txn_log.metrics())
 
 
 @api_blueprint.get("/transactions/recent")
 def recent_transactions():
     txn_log = current_app.config["TRANSACTION_LOG"]
+    if txn_log is None:
+        startup_errors = current_app.config.get("STARTUP_ERRORS", [])
+        return (
+            jsonify(
+                {
+                    "error": "Transaction log unavailable.",
+                    "startup_errors": startup_errors,
+                }
+            ),
+            503,
+        )
     limit_raw = request.args.get("limit", default="20")
     try:
         limit = max(1, min(int(limit_raw), 200))
@@ -39,6 +64,17 @@ def verify_transaction():
 
     model_service = current_app.config["MODEL_SERVICE"]
     txn_log = current_app.config["TRANSACTION_LOG"]
+    if model_service is None:
+        startup_errors = current_app.config.get("STARTUP_ERRORS", [])
+        return (
+            jsonify(
+                {
+                    "error": "Model unavailable.",
+                    "startup_errors": startup_errors,
+                }
+            ),
+            503,
+        )
 
     try:
         result = model_service.predict(
@@ -58,7 +94,8 @@ def verify_transaction():
         "risk_level": result["risk_level"],
         "risk_score": result["risk_score"],
     }
-    txn_log.add(txn_record)
+    if txn_log is not None:
+        txn_log.add(txn_record)
 
     response = {
         "is_fraudulent": result["is_fraudulent"],
