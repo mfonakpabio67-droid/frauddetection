@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-# frauddetection
-=======
 # Real-Time Financial Anomaly Detection System
 
 This project is a production-ready baseline for fraud/anomaly detection in fintech settings where labeled fraud data is unavailable.
@@ -258,4 +255,3 @@ SQLite persistence:
    - Red blinking alert for critical risk
    - Loading "SCANNING..." animation
    - API-down error handling
->>>>>>> 8ffef6b (Initial commit)
