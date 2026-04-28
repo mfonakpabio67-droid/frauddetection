@@ -1,7 +1,8 @@
 import logging
 import os
+from pathlib import Path
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, send_from_directory
 from flask_cors import CORS
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -30,7 +31,7 @@ def configure_logging(app: Flask) -> None:
 
 
 def create_app() -> Flask:
-    app = Flask(__name__)
+    app = Flask(__name__, static_folder="frontend", static_url_path="")
     app.config["JSON_SORT_KEYS"] = False
 
     configure_logging(app)
@@ -76,6 +77,19 @@ def create_app() -> Flask:
     @app.errorhandler(429)
     def rate_limited(_):
         return jsonify({"error": "Rate limit exceeded"}), 429
+
+    frontend_dir = Path(app.root_path) / "frontend"
+
+    @app.get("/")
+    def serve_frontend_root():
+        return send_from_directory(frontend_dir, "index.html")
+
+    @app.get("/<path:path>")
+    def serve_frontend_assets(path: str):
+        requested = frontend_dir / path
+        if requested.exists() and requested.is_file():
+            return send_from_directory(frontend_dir, path)
+        return send_from_directory(frontend_dir, "index.html")
 
     app.logger.info(
         "API booted. Model=%s Scaler=%s TxnDB=%s",
