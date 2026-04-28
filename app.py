@@ -43,7 +43,6 @@ def create_app() -> Flask:
         storage_uri="memory://",
     )
 
-<<<<<<< HEAD
     model_service = None
     transaction_log = None
     startup_errors = []
@@ -67,17 +66,6 @@ def create_app() -> Flask:
     app.config["MODEL_SERVICE"] = model_service
     app.config["TRANSACTION_LOG"] = transaction_log
     app.config["STARTUP_ERRORS"] = startup_errors
-=======
-    model_service = ModelService(
-        model_path=MODEL_PATH,
-        scaler_path=SCALER_PATH,
-        metadata_path=METADATA_PATH,
-    )
-    transaction_log = TransactionLog(db_path=TRANSACTION_DB_PATH)
-
-    app.config["MODEL_SERVICE"] = model_service
-    app.config["TRANSACTION_LOG"] = transaction_log
->>>>>>> 8ffef6b330ddaa0cbd7cbc524005100b34c118a6
 
     app.register_blueprint(api_blueprint)
 
@@ -95,11 +83,8 @@ def create_app() -> Flask:
         SCALER_PATH,
         TRANSACTION_DB_PATH,
     )
-<<<<<<< HEAD
     if startup_errors:
         app.logger.error("Startup completed with errors: %s", startup_errors)
-=======
->>>>>>> 8ffef6b330ddaa0cbd7cbc524005100b34c118a6
     return app
 
 
