@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: frauddetector-api
+    environment:
+      FLASK_ENV: production
+      CORS_ORIGINS: "*"
+      MODEL_PATH: /app/models/isolation_forest.joblib
+      SCALER_PATH: /app/models/robust_scaler.joblib
+      TRANSACTION_DB_PATH: /app/data/transactions.db
+      RATE_LIMIT: 120 per minute
+    volumes:
+      - ./models:/app/models
+      - ./data:/app/data
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frauddetector-frontend
+    depends_on:
+      - api
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+
