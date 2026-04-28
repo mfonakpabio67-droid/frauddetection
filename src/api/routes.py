@@ -8,15 +8,19 @@ api_blueprint = Blueprint("api", __name__, url_prefix="/api")
 
 @api_blueprint.get("/health")
 def health():
+<<<<<<< HEAD
     startup_errors = current_app.config.get("STARTUP_ERRORS", [])
     if startup_errors:
         return jsonify({"status": "degraded", "startup_errors": startup_errors}), 503
+=======
+>>>>>>> 8ffef6b330ddaa0cbd7cbc524005100b34c118a6
     return jsonify({"status": "ok"})
 
 
 @api_blueprint.get("/metrics")
 def metrics():
     txn_log = current_app.config["TRANSACTION_LOG"]
+<<<<<<< HEAD
     if txn_log is None:
         startup_errors = current_app.config.get("STARTUP_ERRORS", [])
         return (
@@ -28,12 +32,15 @@ def metrics():
             ),
             503,
         )
+=======
+>>>>>>> 8ffef6b330ddaa0cbd7cbc524005100b34c118a6
     return jsonify(txn_log.metrics())
 
 
 @api_blueprint.get("/transactions/recent")
 def recent_transactions():
     txn_log = current_app.config["TRANSACTION_LOG"]
+<<<<<<< HEAD
     if txn_log is None:
         startup_errors = current_app.config.get("STARTUP_ERRORS", [])
         return (
@@ -45,6 +52,8 @@ def recent_transactions():
             ),
             503,
         )
+=======
+>>>>>>> 8ffef6b330ddaa0cbd7cbc524005100b34c118a6
     limit_raw = request.args.get("limit", default="20")
     try:
         limit = max(1, min(int(limit_raw), 200))
@@ -64,6 +73,7 @@ def verify_transaction():
 
     model_service = current_app.config["MODEL_SERVICE"]
     txn_log = current_app.config["TRANSACTION_LOG"]
+<<<<<<< HEAD
     if model_service is None:
         startup_errors = current_app.config.get("STARTUP_ERRORS", [])
         return (
@@ -75,6 +85,8 @@ def verify_transaction():
             ),
             503,
         )
+=======
+>>>>>>> 8ffef6b330ddaa0cbd7cbc524005100b34c118a6
 
     try:
         result = model_service.predict(
@@ -94,8 +106,12 @@ def verify_transaction():
         "risk_level": result["risk_level"],
         "risk_score": result["risk_score"],
     }
+<<<<<<< HEAD
     if txn_log is not None:
         txn_log.add(txn_record)
+=======
+    txn_log.add(txn_record)
+>>>>>>> 8ffef6b330ddaa0cbd7cbc524005100b34c118a6
 
     response = {
         "is_fraudulent": result["is_fraudulent"],

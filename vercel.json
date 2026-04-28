@@ -1,9 +1,15 @@
 {
+<<<<<<< HEAD
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
   "name": "frauddetector-frontend",
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/index.py" },
+=======
+  "version": 2,
+  "name": "frauddetector-frontend",
+  "routes": [
+>>>>>>> 8ffef6b330ddaa0cbd7cbc524005100b34c118a6
     { "src": "/", "dest": "/frontend/index.html" },
     { "src": "/(.*)", "dest": "/frontend/$1" }
   ]

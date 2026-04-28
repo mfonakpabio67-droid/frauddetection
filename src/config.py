@@ -35,7 +35,13 @@ METADATA_PATH = Path(os.getenv("METADATA_PATH", MODELS_DIR / "model_metadata.jso
 FLASK_ENV = os.getenv("FLASK_ENV", "development")
 CORS_ORIGINS = os.getenv("CORS_ORIGINS", "*")
 RATE_LIMIT = os.getenv("RATE_LIMIT", "60 per minute")
+<<<<<<< HEAD
 
 # Vercel's serverless filesystem is read-only except /tmp at runtime.
 _default_db_path = Path("/tmp/transactions.db") if os.getenv("VERCEL") else (BASE_DIR / "data" / "transactions.db")
 TRANSACTION_DB_PATH = Path(os.getenv("TRANSACTION_DB_PATH", _default_db_path))
+=======
+TRANSACTION_DB_PATH = Path(
+    os.getenv("TRANSACTION_DB_PATH", BASE_DIR / "data" / "transactions.db")
+)
+>>>>>>> 8ffef6b330ddaa0cbd7cbc524005100b34c118a6
